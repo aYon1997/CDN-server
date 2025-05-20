@@ -1,39 +1,19 @@
-
-<!DOCTYPE html><html lang="en">
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>XXX占比环比按天情况</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <style>
-         body {
-             font-family: Arial, sans-serif;
-             margin: 0;
-             padding: 20px;
-            
-        }
-
-         .chart-container {
-             width: 90%;
-             height: 400px;
-             margin: 20px auto;
-            
-        }
-
-        
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
 </head>
-
-<body> <h2>XXX占比环比按天情况</h2> <div class="chart-container"> <canvas id="chart1"></canvas> </div>
-    <table border="1" cellpadding="8" cellspacing="0" style="width: 90%; margin: 20px auto; border-collapse:
-        collapse;"> <thead> <tr> <th>日期</th> <th>XXX占比</th> <th>环比变化值</th> <th>上期XXX占比</th> </tr>
-        </thead> <tbody> <tr> <td>2025-04-21</td> <td>0.2</td> <td>无</td> <td>无</td> </tr> <tr> <td>
-                    2025-04-22</td> <td>0.4</td> <td>0.2</td> <td>0.2</td> </tr> <tr> <td>2025-04-23</td>
-                <td>0</td> <td>-0.4</td> <td>0.4</td> </tr> <tr> <td>2025-04-24</td> <td>1</td> <td>1</td>
-                 <td>0</td> </tr> <tr> <td>2025-04-25</td> <td>0.5</td> <td>-0.5</td> <td>1</td> </tr>
-            <tr> <td>2025-04-27</td> <td>0.333</td> <td>-0.167</td> <td>0.5</td> </tr> <tr> <td>2025-04-28
-                </td> <td>0.091</td> <td>-0.242</td> <td>0.333</td> </tr> </tbody> </table>
-    <script>        const ctx1 = document.getElementById('chart1').getContext('2d');         const chart1 = new Chart(ctx1, {             type: 'line',             data: {                 labels: ['2025-04-21', '2025-04-22', '2025-04-23', '2025-04-24', '2025-04-25', '2025-04-27', '2025-04-28'],                 datasets: [                    {                         label: 'XXX占比',                         data: [0.2, 0.4, 0, 1, 0.5, 0.3333333333333333, 0.09090909090909091],                         borderColor: 'rgba(54, 162, 235, 1)',                         backgroundColor: 'rgba(54, 162, 235, 0.2)',                         borderWidth: 2,                         tension: 0.1 },                     {                         label: '环比变化值',                         data: [null, 0.2, -0.4, 1, -0.5, -0.16666666666666666, -0.24242424242424243],                         borderColor: 'rgba(255, 99, 132, 1)',                         backgroundColor: 'rgba(255, 99, 132, 0.2)',                         borderWidth: 2,                         tension: 0.1 }] },             options: {                 responsive: true,                 maintainAspectRatio: false,                 scales: {                     y: {                         beginAtZero: true } } } });     </script>
+<body>
+<iframe src="http://172.22.10.219:80" width="100%" height="500px"></iframe>
     
+    <script>
+        // 获取sessionStorage中的Admin-Token
+        setTimeout(() => {
+            const token = sessionStorage.getItem('Admin-Token');
+        console.log('Admin-Token:', token);
+        },3000)
+    </script>
 </body>
-
 </html>
