@@ -1,0 +1,45 @@
+name: Deploy Multiple Branches
+
+on:
+  push:
+    branches: [ main, feature/* ]  # 监听的多个分支
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        branch: [main, feature1, feature2]  # 要部署的分支列表
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.branch }}
+      
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Build with base path
+        run: |
+          if [ "${{ matrix.branch }}" == "main" ]; then
+            npm run build
+          else
+            npm run build -- --base=/${{ matrix.branch }}/
+          fi
+          
+          # 移动文件到分支目录
+          mkdir -p ./dist/${{ matrix.branch }}
+          mv ./dist/* ./dist/${{ matrix.branch }}/
+      
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: gh-pages
+          destination_dir: ${{ matrix.branch }}
