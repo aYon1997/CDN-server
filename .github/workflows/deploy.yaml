@@ -1,45 +1,257 @@
-name: Deploy Multiple Branches
+name: Deploy Branch-Specific Pages
 
 on:
   push:
-    branches: [ main, feature/* ]  # 监听的多个分支
+    branches: 
+      - main
+      - feature/**
+      - dev
+      - staging
+      - production
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: '要部署的分支'
+        required: true
+        default: 'main'
 
 jobs:
-  deploy:
+  deploy-main:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        branch: [main, feature1, feature2]  # 要部署的分支列表
+    environment: github-pages
     
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout main branch
+        uses: actions/checkout@v4
         with:
-          ref: ${{ matrix.branch }}
-      
-      - name: Setup Node
-        uses: actions/setup-node@v3
+          ref: main
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
-      
+          node-version: '18'
+          cache: 'npm'
+          
       - name: Install dependencies
-        run: npm install
-      
-      - name: Build with base path
+        run: npm ci || npm install
+        
+      - name: Build main branch
         run: |
-          if [ "${{ matrix.branch }}" == "main" ]; then
-            npm run build
-          else
-            npm run build -- --base=/${{ matrix.branch }}/
+          # 为主分支构建，使用根路径
+          if [ -f "package.json" ]; then
+            npm run build || echo "No build script found"
           fi
           
-          # 移动文件到分支目录
-          mkdir -p ./dist/${{ matrix.branch }}
-          mv ./dist/* ./dist/${{ matrix.branch }}/
-      
-      - name: Deploy to GitHub Pages
+          # 确保dist目录存在
+          mkdir -p dist
+          
+          # 如果没有构建产物，直接复制index.html
+          if [ ! -f "dist/index.html" ] && [ -f "index.html" ]; then
+            cp index.html dist/
+          fi
+          
+      - name: Deploy to GitHub Pages (main)
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           publish_branch: gh-pages
-          destination_dir: ${{ matrix.branch }}
+          destination_dir: .
+          cname: ${{ vars.CUSTOM_DOMAIN }}
+
+  deploy-feature:
+    if: startsWith(github.ref, 'refs/heads/feature/')
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+        
+      - name: Checkout feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BRANCH_NAME }}
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci || npm install
+        
+      - name: Build feature branch
+        run: |
+          # 为特性分支构建，使用分支特定的base路径
+          if [ -f "package.json" ]; then
+            npm run build -- --base=/${{ env.BRANCH_NAME }}/ || npm run build || echo "No build script found"
+          fi
+          
+          # 确保dist目录存在
+          mkdir -p dist
+          
+          # 如果没有构建产物，使用分支特定的index.html
+          if [ ! -f "dist/index.html" ]; then
+            if [ -f "index-${{ env.BRANCH_NAME }}.html" ]; then
+              cp "index-${{ env.BRANCH_NAME }}.html" dist/index.html
+            elif [ -f "index.html" ]; then
+              cp index.html dist/
+              # 在HTML中注入分支信息
+              sed -i 's/<title>/<title>[分支: ${{ env.BRANCH_NAME }}] /' dist/index.html
+            fi
+          fi
+          
+      - name: Deploy to GitHub Pages (feature)
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: gh-pages
+          destination_dir: ${{ env.BRANCH_NAME }}
+
+  deploy-dev:
+    if: github.ref == 'refs/heads/dev'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout dev branch
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci || npm install
+        
+      - name: Build dev branch
+        run: |
+          # 为开发分支构建
+          if [ -f "package.json" ]; then
+            npm run build:dev || npm run build || echo "No build script found"
+          fi
+          
+          # 确保dist目录存在
+          mkdir -p dist
+          
+          # 使用开发环境特定的index.html
+          if [ ! -f "dist/index.html" ]; then
+            if [ -f "index-dev.html" ]; then
+              cp "index-dev.html" dist/index.html
+            elif [ -f "index.html" ]; then
+              cp index.html dist/
+              sed -i 's/<title>/<title>[开发环境] /' dist/index.html
+              sed -i 's/<body>/<body><div style="background: #f39c12; color: white; text-align: center; padding: 10px; position: fixed; top: 0; width: 100%; z-index: 9999;">🚧 开发环境 🚧<\/div>/' dist/index.html
+            fi
+          fi
+          
+      - name: Deploy to GitHub Pages (dev)
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: gh-pages
+          destination_dir: dev
+
+  deploy-staging:
+    if: github.ref == 'refs/heads/staging'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout staging branch
+        uses: actions/checkout@v4
+        with:
+          ref: staging
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci || npm install
+        
+      - name: Build staging branch
+        run: |
+          # 为预发布分支构建
+          if [ -f "package.json" ]; then
+            npm run build:staging || npm run build || echo "No build script found"
+          fi
+          
+          # 确保dist目录存在
+          mkdir -p dist
+          
+          # 使用预发布环境特定的index.html
+          if [ ! -f "dist/index.html" ]; then
+            if [ -f "index-staging.html" ]; then
+              cp "index-staging.html" dist/index.html
+            elif [ -f "index.html" ]; then
+              cp index.html dist/
+              sed -i 's/<title>/<title>[预发布环境] /' dist/index.html
+              sed -i 's/<body>/<body><div style="background: #e67e22; color: white; text-align: center; padding: 10px; position: fixed; top: 0; width: 100%; z-index: 9999;">🔶 预发布环境 🔶<\/div>/' dist/index.html
+            fi
+          fi
+          
+      - name: Deploy to GitHub Pages (staging)
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: gh-pages
+          destination_dir: staging
+
+  deploy-production:
+    if: github.ref == 'refs/heads/production'
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps:
+      - name: Checkout production branch
+        uses: actions/checkout@v4
+        with:
+          ref: production
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci || npm install
+        
+      - name: Build production branch
+        run: |
+          # 为生产分支构建
+          if [ -f "package.json" ]; then
+            npm run build:production || npm run build || echo "No build script found"
+          fi
+          
+          # 确保dist目录存在
+          mkdir -p dist
+          
+          # 使用生产环境特定的index.html
+          if [ ! -f "dist/index.html" ]; then
+            if [ -f "index-production.html" ]; then
+              cp "index-production.html" dist/index.html
+            elif [ -f "index.html" ]; then
+              cp index.html dist/
+              sed -i 's/<title>/<title>[生产环境] /' dist/index.html
+            fi
+          fi
+          
+      - name: Deploy to GitHub Pages (production)
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: gh-pages
+          destination_dir: production
