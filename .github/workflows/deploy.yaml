@@ -33,9 +33,17 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
+          cache-dependency-path: |
+            package-lock.json
+            package.json
           
       - name: Install dependencies
-        run: npm ci || npm install
+        run: |
+          if [ -f "package-lock.json" ]; then
+            npm ci
+          else
+            npm install
+          fi
         
       - name: Build main branch
         run: |
@@ -80,9 +88,17 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
+          cache-dependency-path: |
+            package-lock.json
+            package.json
           
       - name: Install dependencies
-        run: npm ci || npm install
+        run: |
+          if [ -f "package-lock.json" ]; then
+            npm ci
+          else
+            npm install
+          fi
         
       - name: Build feature branch
         run: |
@@ -128,9 +144,17 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
+          cache-dependency-path: |
+            package-lock.json
+            package.json
           
       - name: Install dependencies
-        run: npm ci || npm install
+        run: |
+          if [ -f "package-lock.json" ]; then
+            npm ci
+          else
+            npm install
+          fi
         
       - name: Build dev branch
         run: |
@@ -176,9 +200,17 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
+          cache-dependency-path: |
+            package-lock.json
+            package.json
           
       - name: Install dependencies
-        run: npm ci || npm install
+        run: |
+          if [ -f "package-lock.json" ]; then
+            npm ci
+          else
+            npm install
+          fi
         
       - name: Build dev2 branch
         run: |
@@ -224,9 +256,17 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
+          cache-dependency-path: |
+            package-lock.json
+            package.json
           
       - name: Install dependencies
-        run: npm ci || npm install
+        run: |
+          if [ -f "package-lock.json" ]; then
+            npm ci
+          else
+            npm install
+          fi
         
       - name: Build staging branch
         run: |
@@ -273,9 +313,17 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
+          cache-dependency-path: |
+            package-lock.json
+            package.json
           
       - name: Install dependencies
-        run: npm ci || npm install
+        run: |
+          if [ -f "package-lock.json" ]; then
+            npm ci
+          else
+            npm install
+          fi
         
       - name: Build production branch
         run: |
