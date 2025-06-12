@@ -59,14 +59,19 @@ jobs:
         
       - name: Build main branch
         run: |
-          # 为主分支构建，使用根路径
-          if [ -f "package.json" ] && grep -q "build" package.json; then
-            npm run build
+          echo "构建主分支内容..."
+          mkdir -p dist
+          
+          if [ -f "index.html" ]; then
+            echo "复制主页面到dist目录"
+            cp index.html dist/
           else
-            echo "No build script found, copying static files"
-            mkdir -p dist
-            cp index.html dist/ || true
+            echo "创建默认主页面"
+            echo "<h1>Main Branch - CDN Server</h1>" > dist/index.html
           fi
+          
+          echo "构建完成，内容："
+          ls -la dist/
           
       - name: Deploy to GitHub Pages (main)
         uses: peaceiris/actions-gh-pages@v4
@@ -173,18 +178,22 @@ jobs:
         
       - name: Build dev branch
         run: |
-          # 为开发分支构建，使用dev页面
-          if [ -f "package.json" ] && grep -q "build:dev" package.json; then
-            npm run build:dev
+          echo "构建dev分支内容..."
+          mkdir -p dist
+          
+          if [ -f "index-dev.html" ]; then
+            echo "使用dev专用页面"
+            cp index-dev.html dist/index.html
+          elif [ -f "index.html" ]; then
+            echo "使用默认页面并添加dev标识"
+            cp index.html dist/index.html
           else
-            echo "Using dev-specific HTML"
-            mkdir -p dist
-            if [ -f "index-dev.html" ]; then
-              cp index-dev.html dist/index.html
-            else
-              cp index.html dist/index.html
-            fi
+            echo "创建默认dev页面"
+            echo "<h1>Dev Branch - CDN Server</h1>" > dist/index.html
           fi
+          
+          echo "构建完成，内容："
+          ls -la dist/
           
       - name: Deploy to GitHub Pages (dev)
         uses: peaceiris/actions-gh-pages@v4
@@ -231,18 +240,22 @@ jobs:
         
       - name: Build dev2 branch
         run: |
-          # 为dev2分支构建，使用dev2页面
-          if [ -f "package.json" ] && grep -q "build:dev2" package.json; then
-            npm run build:dev2
+          echo "构建dev2分支内容..."
+          mkdir -p dist
+          
+          if [ -f "index-dev2.html" ]; then
+            echo "使用dev2专用页面"
+            cp index-dev2.html dist/index.html
+          elif [ -f "index.html" ]; then
+            echo "使用默认页面并添加dev2标识" 
+            cp index.html dist/index.html
           else
-            echo "Using dev2-specific HTML"
-            mkdir -p dist
-            if [ -f "index-dev2.html" ]; then
-              cp index-dev2.html dist/index.html
-            else
-              cp index.html dist/index.html
-            fi
+            echo "创建默认dev2页面"
+            echo "<h1>Dev2 Branch - CDN Server</h1>" > dist/index.html
           fi
+          
+          echo "构建完成，内容："
+          ls -la dist/
           
       - name: Deploy to GitHub Pages (dev2)
         uses: peaceiris/actions-gh-pages@v4
@@ -289,18 +302,22 @@ jobs:
         
       - name: Build staging branch
         run: |
-          # 为预发布分支构建
-          if [ -f "package.json" ] && grep -q "build:staging" package.json; then
-            npm run build:staging
+          echo "构建staging分支内容..."
+          mkdir -p dist
+          
+          if [ -f "index-staging.html" ]; then
+            echo "使用staging专用页面"
+            cp index-staging.html dist/index.html
+          elif [ -f "index.html" ]; then
+            echo "使用默认页面并添加staging标识"
+            cp index.html dist/index.html
           else
-            echo "Using staging-specific HTML"
-            mkdir -p dist
-            if [ -f "index-staging.html" ]; then
-              cp index-staging.html dist/index.html
-            else
-              cp index.html dist/index.html
-            fi
+            echo "创建默认staging页面"
+            echo "<h1>Staging Branch - CDN Server</h1>" > dist/index.html
           fi
+          
+          echo "构建完成，内容："
+          ls -la dist/
           
       - name: Deploy to GitHub Pages (staging)
         uses: peaceiris/actions-gh-pages@v4
@@ -346,18 +363,22 @@ jobs:
         
       - name: Build production branch
         run: |
-          # 为生产分支构建
-          if [ -f "package.json" ] && grep -q "build:production" package.json; then
-            npm run build:production
+          echo "构建production分支内容..."
+          mkdir -p dist
+          
+          if [ -f "index-production.html" ]; then
+            echo "使用production专用页面"
+            cp index-production.html dist/index.html
+          elif [ -f "index.html" ]; then
+            echo "使用默认页面"
+            cp index.html dist/index.html
           else
-            echo "Using production-specific HTML"
-            mkdir -p dist
-            if [ -f "index-production.html" ]; then
-              cp index-production.html dist/index.html
-            else
-              cp index.html dist/index.html
-            fi
+            echo "创建默认production页面"
+            echo "<h1>Production Branch - CDN Server</h1>" > dist/index.html
           fi
+          
+          echo "构建完成，内容："
+          ls -la dist/
           
       - name: Deploy to GitHub Pages (production)
         uses: peaceiris/actions-gh-pages@v4
