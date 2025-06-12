@@ -5,7 +5,8 @@
   "main": "index.html",
   "scripts": {
     "build": "echo 'Building for production...' && mkdir -p dist && cp index.html dist/",
-    "build:development": "cross-env NODE_ENV=development BRANCH=dev npm run build",
+    "build:dev": "cross-env NODE_ENV=development BRANCH=dev npm run build",
+    "build:dev2": "cross-env NODE_ENV=development BRANCH=dev2 npm run build",
     "build:staging": "cross-env NODE_ENV=staging BRANCH=staging npm run build",
     "build:production": "cross-env NODE_ENV=production BRANCH=production npm run build",
     "config:generate": "node branch-config.js generate",
@@ -13,6 +14,7 @@
     "preview:all": "node branch-config.js preview",
     "serve": "npx http-server . -p 8080 -o",
     "serve:dev": "npx http-server . -p 8081 -o /index-dev.html",
+    "serve:dev2": "npx http-server . -p 8083 -o /index-dev2.html",
     "serve:staging": "npx http-server . -p 8082 -o /index-staging.html",
     "test": "echo 'No tests specified'"
   },
