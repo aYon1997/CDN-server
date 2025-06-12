@@ -16,11 +16,21 @@ on:
         required: true
         default: 'main'
 
+# 全局权限设置
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
   deploy-main:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: github-pages
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
     
     steps:
       - name: Checkout main branch
@@ -39,35 +49,33 @@ jobs:
           
       - name: Install dependencies
         run: |
-          if [ -f "package-lock.json" ]; then
+          if [ -f package-lock.json ]; then
+            echo "Found package-lock.json, using npm ci"
             npm ci
           else
+            echo "No package-lock.json found, using npm install"
             npm install
           fi
         
       - name: Build main branch
         run: |
           # 为主分支构建，使用根路径
-          if [ -f "package.json" ]; then
-            npm run build || echo "No build script found"
-          fi
-          
-          # 确保dist目录存在
-          mkdir -p dist
-          
-          # 如果没有构建产物，直接复制index.html
-          if [ ! -f "dist/index.html" ] && [ -f "index.html" ]; then
-            cp index.html dist/
+          if [ -f "package.json" ] && grep -q "build" package.json; then
+            npm run build
+          else
+            echo "No build script found, copying static files"
+            mkdir -p dist
+            cp index.html dist/ || true
           fi
           
       - name: Deploy to GitHub Pages (main)
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           publish_branch: gh-pages
-          destination_dir: .
-          cname: ${{ vars.CUSTOM_DOMAIN }}
+          destination_dir: '.'
+          cname: ''
 
   deploy-feature:
     if: startsWith(github.ref, 'refs/heads/feature/')
@@ -132,6 +140,11 @@ jobs:
   deploy-dev:
     if: github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
+    environment: github-pages
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
     
     steps:
       - name: Checkout dev branch
@@ -150,44 +163,46 @@ jobs:
           
       - name: Install dependencies
         run: |
-          if [ -f "package-lock.json" ]; then
+          if [ -f package-lock.json ]; then
+            echo "Found package-lock.json, using npm ci"
             npm ci
           else
+            echo "No package-lock.json found, using npm install"
             npm install
           fi
         
       - name: Build dev branch
         run: |
-          # 为开发分支构建
-          if [ -f "package.json" ]; then
-            npm run build:dev || npm run build || echo "No build script found"
-          fi
-          
-          # 确保dist目录存在
-          mkdir -p dist
-          
-          # 使用开发环境特定的index.html
-          if [ ! -f "dist/index.html" ]; then
+          # 为开发分支构建，使用dev页面
+          if [ -f "package.json" ] && grep -q "build:dev" package.json; then
+            npm run build:dev
+          else
+            echo "Using dev-specific HTML"
+            mkdir -p dist
             if [ -f "index-dev.html" ]; then
-              cp "index-dev.html" dist/index.html
-            elif [ -f "index.html" ]; then
-              cp index.html dist/
-              sed -i 's/<title>/<title>[开发环境] /' dist/index.html
-              sed -i 's/<body>/<body><div style="background: #f39c12; color: white; text-align: center; padding: 10px; position: fixed; top: 0; width: 100%; z-index: 9999;">🚧 开发环境 🚧<\/div>/' dist/index.html
+              cp index-dev.html dist/index.html
+            else
+              cp index.html dist/index.html
             fi
           fi
           
       - name: Deploy to GitHub Pages (dev)
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           publish_branch: gh-pages
-          destination_dir: dev
+          destination_dir: 'dev'
+          allow_empty_commit: true
 
   deploy-dev2:
     if: github.ref == 'refs/heads/dev2'
     runs-on: ubuntu-latest
+    environment: github-pages
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
     
     steps:
       - name: Checkout dev2 branch
@@ -206,44 +221,46 @@ jobs:
           
       - name: Install dependencies
         run: |
-          if [ -f "package-lock.json" ]; then
+          if [ -f package-lock.json ]; then
+            echo "Found package-lock.json, using npm ci"
             npm ci
           else
+            echo "No package-lock.json found, using npm install"
             npm install
           fi
         
       - name: Build dev2 branch
         run: |
-          # 为开发分支2构建
-          if [ -f "package.json" ]; then
-            npm run build:dev2 || npm run build || echo "No build script found"
-          fi
-          
-          # 确保dist目录存在
-          mkdir -p dist
-          
-          # 使用开发环境2特定的index.html
-          if [ ! -f "dist/index.html" ]; then
+          # 为dev2分支构建，使用dev2页面
+          if [ -f "package.json" ] && grep -q "build:dev2" package.json; then
+            npm run build:dev2
+          else
+            echo "Using dev2-specific HTML"
+            mkdir -p dist
             if [ -f "index-dev2.html" ]; then
-              cp "index-dev2.html" dist/index.html
-            elif [ -f "index.html" ]; then
-              cp index.html dist/
-              sed -i 's/<title>/<title>[开发环境2] /' dist/index.html
-              sed -i 's/<body>/<body><div style="background: #9b59b6; color: white; text-align: center; padding: 10px; position: fixed; top: 0; width: 100%; z-index: 9999;">🚧 开发环境2 🚧<\/div>/' dist/index.html
+              cp index-dev2.html dist/index.html
+            else
+              cp index.html dist/index.html
             fi
           fi
           
       - name: Deploy to GitHub Pages (dev2)
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           publish_branch: gh-pages
-          destination_dir: dev2
+          destination_dir: 'dev2'
+          allow_empty_commit: true
 
   deploy-staging:
     if: github.ref == 'refs/heads/staging'
     runs-on: ubuntu-latest
+    environment: github-pages
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
     
     steps:
       - name: Checkout staging branch
@@ -262,45 +279,45 @@ jobs:
           
       - name: Install dependencies
         run: |
-          if [ -f "package-lock.json" ]; then
+          if [ -f package-lock.json ]; then
+            echo "Found package-lock.json, using npm ci"
             npm ci
           else
+            echo "No package-lock.json found, using npm install"
             npm install
           fi
         
       - name: Build staging branch
         run: |
           # 为预发布分支构建
-          if [ -f "package.json" ]; then
-            npm run build:staging || npm run build || echo "No build script found"
-          fi
-          
-          # 确保dist目录存在
-          mkdir -p dist
-          
-          # 使用预发布环境特定的index.html
-          if [ ! -f "dist/index.html" ]; then
+          if [ -f "package.json" ] && grep -q "build:staging" package.json; then
+            npm run build:staging
+          else
+            echo "Using staging-specific HTML"
+            mkdir -p dist
             if [ -f "index-staging.html" ]; then
-              cp "index-staging.html" dist/index.html
-            elif [ -f "index.html" ]; then
-              cp index.html dist/
-              sed -i 's/<title>/<title>[预发布环境] /' dist/index.html
-              sed -i 's/<body>/<body><div style="background: #e67e22; color: white; text-align: center; padding: 10px; position: fixed; top: 0; width: 100%; z-index: 9999;">🔶 预发布环境 🔶<\/div>/' dist/index.html
+              cp index-staging.html dist/index.html
+            else
+              cp index.html dist/index.html
             fi
           fi
           
       - name: Deploy to GitHub Pages (staging)
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           publish_branch: gh-pages
-          destination_dir: staging
+          destination_dir: 'staging'
 
   deploy-production:
     if: github.ref == 'refs/heads/production'
     runs-on: ubuntu-latest
-    environment: production
+    environment: github-pages
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
     
     steps:
       - name: Checkout production branch
@@ -319,36 +336,33 @@ jobs:
           
       - name: Install dependencies
         run: |
-          if [ -f "package-lock.json" ]; then
+          if [ -f package-lock.json ]; then
+            echo "Found package-lock.json, using npm ci"
             npm ci
           else
+            echo "No package-lock.json found, using npm install"
             npm install
           fi
         
       - name: Build production branch
         run: |
           # 为生产分支构建
-          if [ -f "package.json" ]; then
-            npm run build:production || npm run build || echo "No build script found"
-          fi
-          
-          # 确保dist目录存在
-          mkdir -p dist
-          
-          # 使用生产环境特定的index.html
-          if [ ! -f "dist/index.html" ]; then
+          if [ -f "package.json" ] && grep -q "build:production" package.json; then
+            npm run build:production
+          else
+            echo "Using production-specific HTML"
+            mkdir -p dist
             if [ -f "index-production.html" ]; then
-              cp "index-production.html" dist/index.html
-            elif [ -f "index.html" ]; then
-              cp index.html dist/
-              sed -i 's/<title>/<title>[生产环境] /' dist/index.html
+              cp index-production.html dist/index.html
+            else
+              cp index.html dist/index.html
             fi
           fi
           
       - name: Deploy to GitHub Pages (production)
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           publish_branch: gh-pages
-          destination_dir: production
+          destination_dir: 'production'
