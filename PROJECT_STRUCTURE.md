@@ -6,7 +6,7 @@
 ## 目录结构
 
 ```
-CDN-server/
+axiao-blog/
 ├── src/                          # 源代码目录
 │   ├── components/               # 可复用组件
 │   │   ├── stagewise/           # Stagewise 页面专用组件

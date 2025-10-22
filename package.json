@@ -1,5 +1,5 @@
 {
-  "name": "cdn-server",
+  "name": "axiao-blog",
   "version": "1.0.0",
   "description": "船新版本阿孝 - 一个基于 React + TypeScript + Vite + Tailwind CSS 构建的现代化多页面个人博客应用",
   "main": "index.js",
