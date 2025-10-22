@@ -12,7 +12,7 @@ const Navbar: React.FC = () => {
             <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white">
               <i className="fa fa-feather text-xl"></i>
             </div>
-            <span className="text-xl font-bold text-neutral-700">星夜笔记</span>
+            <span className="text-xl font-bold text-neutral-700">船新版本阿孝</span>
           </Link>
 
           <nav className="hidden md:flex space-x-8">

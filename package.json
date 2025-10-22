@@ -1,7 +1,7 @@
 {
   "name": "cdn-server",
   "version": "1.0.0",
-  "description": ".nojekyll 是一个用于 GitHub Pages 项目的特殊文件，它的主要作用是控制 GitHub Pages 对项目内容的处理方式，尤其是与 Jekyll 静态网站生成器相关的功能。以下是关于该文件的详细介绍：",
+  "description": "船新版本阿孝 - 一个基于 React + TypeScript + Vite + Tailwind CSS 构建的现代化多页面个人博客应用",
   "main": "index.js",
   "scripts": {
     "dev": "vite",
