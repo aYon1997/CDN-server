@@ -1,14 +1,14 @@
-# 船新版本阿孝 · CDN Server
+# 船新版本阿孝 · Personal Blog
 
 <div align="center">
 
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Active-success?logo=github)](https://ayon1997.github.io/CDN-server/)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/ayon1997/CDN-server/deploy.yaml?label=Build)](https://github.com/ayon1997/CDN-server/actions)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Active-success?logo=github)](https://ayon1997.github.io/axiao-blog/)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/ayon1997/axiao-blog/deploy.yaml?label=Build)](https://github.com/ayon1997/axiao-blog/actions)
 [![License](https://img.shields.io/badge/License-ISC-blue.svg)](LICENSE)
 
 **一个支持多分支独立部署的 GitHub Pages 静态资源服务器**
 
-[📚 部署指南](#-快速部署) • [🌐 在线访问](https://ayon1997.github.io/CDN-server/) • [📖 文档](#-相关文档)
+[📚 部署指南](#-快速部署) • [🌐 在线访问](https://ayon1997.github.io/axiao-blog/) • [📖 文档](#-相关文档)
 
 </div>
 
@@ -30,10 +30,10 @@
 
 | 分支 | 环境 | 访问地址 | 状态 |
 |------|------|----------|------|
-| **main** | 生产环境 | [https://ayon1997.github.io/CDN-server/](https://ayon1997.github.io/CDN-server/) | ✅ 运行中 |
-| **dev** | 开发环境 | [https://ayon1997.github.io/dev/CDN-server/](https://ayon1997.github.io/dev/CDN-server/) | ✅ 运行中 |
-| **dev2** | 测试环境 | [https://ayon1997.github.io/dev2/CDN-server/](https://ayon1997.github.io/dev2/CDN-server/) | ✅ 运行中 |
-| **staging** | 预发布 | [https://ayon1997.github.io/staging/CDN-server/](https://ayon1997.github.io/staging/CDN-server/) | ⏸️ 待配置 |
+| **main** | 生产环境 | [https://ayon1997.github.io/axiao-blog/](https://ayon1997.github.io/axiao-blog/) | ✅ 运行中 |
+| **dev** | 开发环境 | [https://ayon1997.github.io/dev/axiao-blog/](https://ayon1997.github.io/dev/axiao-blog/) | ✅ 运行中 |
+| **dev2** | 测试环境 | [https://ayon1997.github.io/dev2/axiao-blog/](https://ayon1997.github.io/dev2/axiao-blog/) | ✅ 运行中 |
+| **staging** | 预发布 | [https://ayon1997.github.io/staging/axiao-blog/](https://ayon1997.github.io/staging/axiao-blog/) | ⏸️ 待配置 |
 
 ## 🚀 快速部署
 
@@ -67,7 +67,7 @@ git push origin main
 ## 📁 项目结构
 
 ```
-CDN-server/
+axiao-blog/
 ├── .github/
 │   └── workflows/
 │       └── deploy.yaml          # GitHub Actions 部署配置
@@ -161,7 +161,7 @@ graph LR
 
 - **作者**: 船新版本阿孝
 - **GitHub**: [@aYon1997](https://github.com/aYon1997)
-- **项目地址**: [CDN-server](https://github.com/aYon1997/CDN-server)
+- **项目地址**: [axiao-blog](https://github.com/aYon1997/axiao-blog)
 
 ---
 

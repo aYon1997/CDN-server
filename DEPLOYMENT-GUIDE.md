@@ -245,7 +245,7 @@ console.table(window.BRANCH_INFO);
 
 ```bash
 # 克隆项目
-git clone https://github.com/aYon1997/CDN-server.git
+git clone https://github.com/aYon1997/axiao-blog.git
 
 # 查看分支
 git branch -a
@@ -276,8 +276,8 @@ git checkout production
 遇到问题？
 
 1. 📚 查看 [常见问题](./README.md#-常见问题)
-2. 🔍 搜索 [Issues](https://github.com/aYon1997/CDN-server/issues)
-3. 💬 提交新的 [Issue](https://github.com/aYon1997/CDN-server/issues/new)
+2. 🔍 搜索 [Issues](https://github.com/aYon1997/axiao-blog/issues)
+3. 💬 提交新的 [Issue](https://github.com/aYon1997/axiao-blog/issues/new)
 4. 📧 联系维护者
 
 ---

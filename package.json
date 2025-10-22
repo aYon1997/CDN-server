@@ -1,7 +1,7 @@
 {
-  "name": "cdn-server-multi-branch",
+  "name": "axiao-blog",
   "version": "1.0.0",
-  "description": "多分支GitHub Pages部署项目",
+  "description": "船新版本阿孝 - 一个基于 React + TypeScript + Vite + Tailwind CSS 构建的现代化多页面个人博客应用",
   "main": "index.html",
   "scripts": {
     "build": "echo 'Building for production...' && mkdir -p dist && cp index.html dist/",
@@ -22,9 +22,12 @@
     "github-pages",
     "multi-branch",
     "deployment",
-    "cdn"
+    "blog",
+    "react",
+    "typescript",
+    "vite"
   ],
-  "author": "Your Name",
+  "author": "船新版本阿孝",
   "license": "MIT",
   "devDependencies": {
     "cross-env": "^7.0.3",
@@ -32,7 +35,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/your-username/your-repo.git"
+    "url": "git+https://github.com/aYon1997/axiao-blog.git"
   },
-  "homepage": "https://your-username.github.io/your-repo/"
+  "homepage": "https://ayon1997.github.io/axiao-blog/"
 } 
