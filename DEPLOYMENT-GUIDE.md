@@ -1,7 +1,26 @@
-# 多分支GitHub Pages部署指南
+# 🚀 多分支 GitHub Pages 部署完整指南
 
-## 🎯 目标
-实现不同分支渲染不同的index.html，每个分支都有独立的GitHub Actions部署流程。
+<div align="center">
+
+**从零开始搭建支持多分支的 GitHub Pages 自动化部署系统**
+
+[![GitHub Actions](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-2088FF?logo=github-actions)](https://github.com/features/actions)
+[![GitHub Pages](https://img.shields.io/badge/Hosting-GitHub%20Pages-222?logo=github)](https://pages.github.com/)
+
+[🎯 部署目标](#-部署目标) • [📋 部署架构](#-部署架构) • [🚀 开始部署](#-快速开始)
+
+</div>
+
+---
+
+## 🎯 部署目标
+
+实现以下功能：
+
+- ✅ 不同分支渲染不同的 `index.html`
+- ✅ 每个分支都有独立的 GitHub Actions 部署流程
+- ✅ 支持多环境隔离（开发、测试、生产）
+- ✅ 自动化构建和部署
 
 ## 📋 部署架构
 
@@ -203,7 +222,74 @@ console.table(window.BRANCH_INFO);
 - 添加性能监控
 
 ### 环境变量管理
-使用GitHub Secrets管理敏感信息：
-- API密钥
+使用 GitHub Secrets 管理敏感信息：
+- API 密钥
 - 数据库连接
-- 第三方服务配置 
+- 第三方服务配置
+
+## 🎓 学习资源
+
+### 官方文档
+- [GitHub Actions 官方文档](https://docs.github.com/en/actions)
+- [GitHub Pages 官方文档](https://docs.github.com/en/pages)
+- [Workflow 语法参考](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions)
+
+### 进阶教程
+- [GitHub Actions 最佳实践](https://docs.github.com/en/actions/learn-github-actions/best-practices-for-github-actions)
+- [自定义 GitHub Actions](https://docs.github.com/en/actions/creating-actions)
+- [使用 Secrets 管理敏感数据](https://docs.github.com/en/actions/security-guides/encrypted-secrets)
+
+## 🌟 项目示例
+
+本项目提供了完整的多分支部署示例：
+
+```bash
+# 克隆项目
+git clone https://github.com/aYon1997/CDN-server.git
+
+# 查看分支
+git branch -a
+
+# 切换到不同分支查看配置
+git checkout dev
+git checkout staging
+git checkout production
+```
+
+## 📈 性能优化建议
+
+1. **缓存依赖** - 使用 `actions/cache` 加速构建
+2. **并行构建** - 利用 GitHub Actions 的并行能力
+3. **增量部署** - 只部署变更的文件
+4. **CDN 加速** - 利用 GitHub Pages 的全球 CDN
+
+## 🔒 安全最佳实践
+
+1. ✅ 使用最小权限原则
+2. ✅ 定期更新依赖
+3. ✅ 使用 Secrets 存储敏感信息
+4. ✅ 启用分支保护规则
+5. ✅ 定期审查 Actions 日志
+
+## 📞 获取帮助
+
+遇到问题？
+
+1. 📚 查看 [常见问题](./README.md#-常见问题)
+2. 🔍 搜索 [Issues](https://github.com/aYon1997/CDN-server/issues)
+3. 💬 提交新的 [Issue](https://github.com/aYon1997/CDN-server/issues/new)
+4. 📧 联系维护者
+
+---
+
+<div align="center">
+
+**🎉 恭喜！你已经完成了多分支部署的配置！**
+
+现在你可以享受自动化部署带来的便利了！
+
+[⬆️ 返回顶部](#-多分支-github-pages-部署完整指南) • [📖 返回主文档](./README.md)
+
+Made with ❤️ by 船新版本阿孝
+
+</div> 
